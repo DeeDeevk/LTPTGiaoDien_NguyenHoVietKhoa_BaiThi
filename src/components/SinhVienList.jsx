@@ -15,9 +15,9 @@ function SinhVienList() {
     age: ''
   });
 
-  const [editStudent, setEditStudent] = useState(null); // Để lưu sinh viên đang chỉnh sửa
+  const [editStudent, setEditStudent] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedClass, setSelectedClass] = useState(''); // Lưu lớp được chọn
+  const [selectedClass, setSelectedClass] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -42,7 +42,6 @@ function SinhVienList() {
     const confirmDelete = window.confirm(`Bạn có chắc muốn xóa sinh viên: ${studentToDelete?.name}?`);
     if (confirmDelete) {
       setStudents(students.filter((student) => student.id !== id));
-      console.log("Đã xóa sinh viên:", studentToDelete);
     }
   };
 
@@ -51,7 +50,7 @@ function SinhVienList() {
   };
 
   const handleEditStudent = (student) => {
-    setEditStudent({ ...student }); // Lưu thông tin sinh viên đang chỉnh sửa
+    setEditStudent({ ...student });
   };
 
   const handleUpdateStudent = () => {
@@ -65,7 +64,7 @@ function SinhVienList() {
     );
 
     setStudents(updatedStudents);
-    setEditStudent(null); // Đóng form chỉnh sửa
+    setEditStudent(null);
   };
 
   const handleClassFilterChange = (e) => {
@@ -80,28 +79,28 @@ function SinhVienList() {
   const classes = [...new Set(students.map(student => student.class))];
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Danh Sách Sinh Viên</h2>
+    <div className="container mx-auto p-8 bg-gray-50 rounded-lg shadow-md">
+      <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">Danh Sách Sinh Viên</h2>
 
-      <div className="mb-4 flex gap-2 flex-wrap">
+      <div className="mb-6 flex gap-4">
         <input
           type="text"
-          className="border p-2 flex-1"
+          className="border rounded-md p-3 flex-1 text-gray-700 focus:ring-2 focus:ring-blue-500"
           placeholder="Tìm kiếm theo tên..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <button
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          className="bg-blue-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
           onClick={handleSearch}
         >
           Tìm kiếm
         </button>
       </div>
 
-      <div className="mb-4 flex gap-2 flex-wrap">
+      <div className="mb-6 flex gap-4">
         <select
-          className="border p-2 flex-1"
+          className="border rounded-md p-3 flex-1 text-gray-700 focus:ring-2 focus:ring-blue-500"
           value={selectedClass}
           onChange={handleClassFilterChange}
         >
@@ -114,9 +113,9 @@ function SinhVienList() {
         </select>
       </div>
 
-      <div className="mb-4 flex gap-2 flex-wrap">
+      <div className="mb-6 flex gap-4">
         <input
-          className="border p-2 flex-1"
+          className="border rounded-md p-3 flex-1 text-gray-700 focus:ring-2 focus:ring-blue-500"
           type="text"
           name="name"
           value={newStudent.name}
@@ -124,7 +123,7 @@ function SinhVienList() {
           onChange={handleInputChange}
         />
         <input
-          className="border p-2 flex-1"
+          className="border rounded-md p-3 flex-1 text-gray-700 focus:ring-2 focus:ring-blue-500"
           type="text"
           name="class"
           value={newStudent.class}
@@ -132,7 +131,7 @@ function SinhVienList() {
           onChange={handleInputChange}
         />
         <input
-          className="border p-2 w-24"
+          className="border rounded-md p-3 w-24 text-gray-700 focus:ring-2 focus:ring-blue-500"
           type="number"
           name="age"
           value={newStudent.age}
@@ -140,7 +139,7 @@ function SinhVienList() {
           onChange={handleInputChange}
         />
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="bg-green-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-green-600 focus:outline-none"
           onClick={handleAddStudent}
         >
           Thêm sinh viên
@@ -148,10 +147,10 @@ function SinhVienList() {
       </div>
 
       {editStudent && (
-        <div className="mb-4 p-4 border border-blue-500 bg-blue-100">
-          <h3 className="text-xl font-bold mb-2">Chỉnh sửa thông tin sinh viên</h3>
+        <div className="mb-6 p-6 bg-blue-100 rounded-md shadow-md">
+          <h3 className="text-xl font-semibold text-gray-800 mb-4">Chỉnh sửa thông tin sinh viên</h3>
           <input
-            className="border p-2 flex-1 mb-2"
+            className="border rounded-md p-3 w-full text-gray-700 mb-4 focus:ring-2 focus:ring-blue-500"
             type="text"
             name="name"
             value={editStudent.name}
@@ -159,7 +158,7 @@ function SinhVienList() {
             placeholder="Họ tên"
           />
           <input
-            className="border p-2 flex-1 mb-2"
+            className="border rounded-md p-3 w-full text-gray-700 mb-4 focus:ring-2 focus:ring-blue-500"
             type="text"
             name="class"
             value={editStudent.class}
@@ -167,7 +166,7 @@ function SinhVienList() {
             placeholder="Lớp"
           />
           <input
-            className="border p-2 w-24 mb-2"
+            className="border rounded-md p-3 w-full text-gray-700 mb-4 focus:ring-2 focus:ring-blue-500"
             type="number"
             name="age"
             value={editStudent.age}
@@ -175,13 +174,13 @@ function SinhVienList() {
             placeholder="Tuổi"
           />
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-blue-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
             onClick={handleUpdateStudent}
           >
             Lưu thay đổi
           </button>
           <button
-            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2"
+            className="bg-gray-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-gray-600 ml-4 focus:outline-none"
             onClick={() => setEditStudent(null)}
           >
             Hủy
@@ -189,14 +188,14 @@ function SinhVienList() {
         </div>
       )}
 
-      <table className="w-full border-collapse border">
+      <table className="min-w-full bg-white rounded-lg shadow-md border-collapse">
         <thead>
-          <tr className="bg-gray-100">
-            <th className="border p-2">ID</th>
-            <th className="border p-2">Tên</th>
-            <th className="border p-2">Lớp</th>
-            <th className="border p-2">Tuổi</th>
-            <th className="border p-2">Hành động</th>
+          <tr className="bg-gray-200">
+            <th className="border p-3 text-left text-gray-600">ID</th>
+            <th className="border p-3 text-left text-gray-600">Tên</th>
+            <th className="border p-3 text-left text-gray-600">Lớp</th>
+            <th className="border p-3 text-left text-gray-600">Tuổi</th>
+            <th className="border p-3 text-left text-gray-600">Hành động</th>
           </tr>
         </thead>
         <tbody>
