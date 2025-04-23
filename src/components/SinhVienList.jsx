@@ -32,6 +32,8 @@ function SinhVienList() {
 
     setStudents([...students, studentToAdd]);
     setNewStudent({ name: '', class: '', age: '' });
+    console.log("Them sinh vien thanh cong!!!");
+    
   };
 
   const handleDeleteStudent = (id) => {
