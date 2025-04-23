@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './SinhVienList.css';
 
 function SinhVienList() {
-  const [students, setStudents] = useState([
-    { id: 1, name: 'Nguyen Van A', class: '12A1', age: 17 },
-    { id: 2, name: 'Tran Thi B', class: '12A2', age: 18 },
-    { id: 3, name: 'Le Van C', class: '12A1', age: 17 },
-  ]);
+  const [students, setStudents] = useState(() => {
+    // Lấy danh sách sinh viên từ localStorage khi load trang
+    const savedStudents = localStorage.getItem('students');
+    return savedStudents ? JSON.parse(savedStudents) : [
+      { id: 1, name: 'Nguyen Van A', class: 'DHKTPM18ATT', age: 21 },
+      { id: 2, name: 'Tran Thi B', class: 'DHKTPM18BTT', age: 21 },
+      { id: 3, name: 'Le Van C', class: 'DHKTPM18CTT', age: 21 },
+    ]; // Nếu không có, sử dụng giá trị mặc định
+  });
 
   const [newStudent, setNewStudent] = useState({
     name: '',
@@ -14,15 +18,17 @@ function SinhVienList() {
     age: ''
   });
 
-  const [editStudent, setEditStudent] = useState(null); // Để lưu sinh viên đang chỉnh sửa
+  const [editStudent, setEditStudent] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedClass, setSelectedClass] = useState(''); // Lưu lớp được chọn
+  const [selectedClass, setSelectedClass] = useState('');
 
+  // Cập nhật sinh viên mới khi nhập liệu
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewStudent({ ...newStudent, [name]: value });
   };
 
+  // Thêm sinh viên vào danh sách và lưu vào localStorage
   const handleAddStudent = () => {
     if (!newStudent.name || !newStudent.class || !newStudent.age) {
       alert('Vui lòng nhập đầy đủ thông tin!');
@@ -32,28 +38,27 @@ function SinhVienList() {
     const newId = students.length > 0 ? Math.max(...students.map(s => s.id)) + 1 : 1;
     const studentToAdd = { ...newStudent, id: newId, age: parseInt(newStudent.age) };
 
-    setStudents([...students, studentToAdd]);
+    const updatedStudents = [...students, studentToAdd];
+    setStudents(updatedStudents);
+    localStorage.setItem('students', JSON.stringify(updatedStudents)); // Lưu vào localStorage
+
     setNewStudent({ name: '', class: '', age: '' });
-    console.log("Them sinh vien thanh cong!!!");
-    
   };
 
+  // Xóa sinh viên và cập nhật vào localStorage
   const handleDeleteStudent = (id) => {
     const studentToDelete = students.find((student) => student.id === id);
     const confirmDelete = window.confirm(`Bạn có chắc muốn xóa sinh viên: ${studentToDelete?.name}?`);
     if (confirmDelete) {
-      setStudents(students.filter((student) => student.id !== id));
-      console.log("Đã xóa sinh viên:", studentToDelete);
+      const updatedStudents = students.filter((student) => student.id !== id);
+      setStudents(updatedStudents);
+      localStorage.setItem('students', JSON.stringify(updatedStudents)); // Lưu vào localStorage
     }
   };
 
-  const handleSearch = () => {
-    setSearchTerm(searchTerm);
-  };
-
-  // Hàm chỉnh sửa sinh viên
+  // Chỉnh sửa thông tin sinh viên
   const handleEditStudent = (student) => {
-    setEditStudent({ ...student }); // Lưu thông tin sinh viên đang chỉnh sửa
+    setEditStudent({ ...student });
   };
 
   const handleUpdateStudent = () => {
@@ -67,10 +72,11 @@ function SinhVienList() {
     );
 
     setStudents(updatedStudents);
-    setEditStudent(null); // Đóng form chỉnh sửa
+    localStorage.setItem('students', JSON.stringify(updatedStudents)); // Lưu vào localStorage
+    setEditStudent(null);
   };
 
-  // Hàm lọc sinh viên theo lớp
+  // Lọc sinh viên theo lớp
   const handleClassFilterChange = (e) => {
     setSelectedClass(e.target.value);
   };
@@ -97,12 +103,6 @@ function SinhVienList() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <button
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-          onClick={handleSearch}
-        >
-          Tìm kiếm
-        </button>
       </div>
 
       {/* Dropdown lọc theo lớp */}
