@@ -16,6 +16,7 @@ function SinhVienList() {
 
   const [editStudent, setEditStudent] = useState(null); // Để lưu sinh viên đang chỉnh sửa
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedClass, setSelectedClass] = useState(''); // Lưu lớp được chọn
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -69,9 +70,19 @@ function SinhVienList() {
     setEditStudent(null); // Đóng form chỉnh sửa
   };
 
+  // Hàm lọc sinh viên theo lớp
+  const handleClassFilterChange = (e) => {
+    setSelectedClass(e.target.value);
+  };
+
+  // Lọc danh sách sinh viên theo lớp và tìm kiếm
   const filteredStudents = students.filter((student) =>
-    student.name.toLowerCase().includes(searchTerm.toLowerCase())
+    (student.name.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    (selectedClass ? student.class === selectedClass : true)
   );
+
+  // Lấy tất cả các lớp có trong danh sách sinh viên để đưa vào dropdown
+  const classes = [...new Set(students.map(student => student.class))];
 
   return (
     <div className="container mx-auto p-4">
@@ -92,6 +103,22 @@ function SinhVienList() {
         >
           Tìm kiếm
         </button>
+      </div>
+
+      {/* Dropdown lọc theo lớp */}
+      <div className="mb-4 flex gap-2 flex-wrap">
+        <select
+          className="border p-2 flex-1"
+          value={selectedClass}
+          onChange={handleClassFilterChange}
+        >
+          <option value="">Chọn lớp</option>
+          {classes.map((className, index) => (
+            <option key={index} value={className}>
+              {className}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Nhập sinh viên mới */}
