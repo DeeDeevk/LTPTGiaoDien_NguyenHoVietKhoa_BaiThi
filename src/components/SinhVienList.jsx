@@ -139,7 +139,7 @@ function SinhVienList() {
           onChange={handleInputChange}
         />
         <button
-          className="bg-green-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-green-600 focus:outline-none"
+          className="bg-blue-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
           onClick={handleAddStudent}
         >
           Thêm sinh viên
@@ -180,7 +180,7 @@ function SinhVienList() {
             Lưu thay đổi
           </button>
           <button
-            className="bg-gray-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-gray-600 ml-4 focus:outline-none"
+            className="bg-blue-500 text-white px-6 py-3 rounded-md shadow-md hover:bg-blue-600 ml-4 focus:outline-none"
             onClick={() => setEditStudent(null)}
           >
             Hủy
