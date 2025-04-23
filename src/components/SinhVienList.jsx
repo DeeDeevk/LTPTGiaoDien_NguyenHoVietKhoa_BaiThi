@@ -14,6 +14,8 @@ function SinhVienList() {
     age: ''
   });
 
+  const [searchTerm, setSearchTerm] = useState('');
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewStudent({ ...newStudent, [name]: value });
@@ -25,14 +27,8 @@ function SinhVienList() {
       return;
     }
 
-    const newId =
-      students.length > 0 ? Math.max(...students.map((s) => s.id)) + 1 : 1;
-
-    const studentToAdd = {
-      ...newStudent,
-      id: newId,
-      age: parseInt(newStudent.age)
-    };
+    const newId = students.length > 0 ? Math.max(...students.map(s => s.id)) + 1 : 1;
+    const studentToAdd = { ...newStudent, id: newId, age: parseInt(newStudent.age) };
 
     setStudents([...students, studentToAdd]);
     setNewStudent({ name: '', class: '', age: '' });
@@ -40,7 +36,6 @@ function SinhVienList() {
 
   const handleDeleteStudent = (id) => {
     const studentToDelete = students.find((student) => student.id === id);
-  
     const confirmDelete = window.confirm(`Bạn có chắc muốn xóa sinh viên: ${studentToDelete?.name}?`);
     if (confirmDelete) {
       setStudents(students.filter((student) => student.id !== id));
@@ -48,11 +43,38 @@ function SinhVienList() {
     }
   };
 
+  const filteredStudents = students.filter((student) =>
+    student.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleSearch = () => {
+    // Tìm kiếm theo tên, có thể xử lý thêm nếu cần
+    setSearchTerm(searchTerm);
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Danh Sách Sinh Viên</h2>
 
-      <div className="mb-4 flex gap-2">
+      {/* Input tìm kiếm */}
+      <div className="mb-4 flex gap-2 flex-wrap">
+        <input
+          type="text"
+          className="border p-2 flex-1"
+          placeholder="Tìm kiếm theo tên..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <button
+          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          onClick={handleSearch}
+        >
+          Tìm kiếm
+        </button>
+      </div>
+
+      {/* Nhập sinh viên mới */}
+      <div className="mb-4 flex gap-2 flex-wrap">
         <input
           className="border p-2 flex-1"
           type="text"
@@ -85,10 +107,11 @@ function SinhVienList() {
         </button>
       </div>
 
+      {/* Bảng sinh viên */}
       <table className="w-full border-collapse border">
         <thead>
           <tr className="bg-gray-100">
-          <th className="border p-2">ID</th>
+            <th className="border p-2">ID</th>
             <th className="border p-2">Tên</th>
             <th className="border p-2">Lớp</th>
             <th className="border p-2">Tuổi</th>
@@ -96,9 +119,9 @@ function SinhVienList() {
           </tr>
         </thead>
         <tbody>
-          {students.map((student) => (
+          {filteredStudents.map((student) => (
             <tr key={student.id} className="hover:bg-gray-50">
-                <td className="border p-2">{student.id}</td>
+              <td className="border p-2">{student.id}</td>
               <td className="border p-2">{student.name}</td>
               <td className="border p-2">{student.class}</td>
               <td className="border p-2">{student.age}</td>
