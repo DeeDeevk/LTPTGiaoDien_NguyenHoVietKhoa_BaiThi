@@ -14,6 +14,7 @@ function SinhVienList() {
     age: ''
   });
 
+  const [editStudent, setEditStudent] = useState(null); // Để lưu sinh viên đang chỉnh sửa
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleInputChange = (e) => {
@@ -45,14 +46,32 @@ function SinhVienList() {
     }
   };
 
+  const handleSearch = () => {
+    setSearchTerm(searchTerm);
+  };
+
+  // Hàm chỉnh sửa sinh viên
+  const handleEditStudent = (student) => {
+    setEditStudent({ ...student }); // Lưu thông tin sinh viên đang chỉnh sửa
+  };
+
+  const handleUpdateStudent = () => {
+    if (!editStudent.name || !editStudent.class || !editStudent.age) {
+      alert('Vui lòng nhập đầy đủ thông tin!');
+      return;
+    }
+
+    const updatedStudents = students.map((student) =>
+      student.id === editStudent.id ? editStudent : student
+    );
+
+    setStudents(updatedStudents);
+    setEditStudent(null); // Đóng form chỉnh sửa
+  };
+
   const filteredStudents = students.filter((student) =>
     student.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const handleSearch = () => {
-    // Tìm kiếm theo tên, có thể xử lý thêm nếu cần
-    setSearchTerm(searchTerm);
-  };
 
   return (
     <div className="container mx-auto p-4">
@@ -109,6 +128,49 @@ function SinhVienList() {
         </button>
       </div>
 
+      {/* Form chỉnh sửa sinh viên */}
+      {editStudent && (
+        <div className="mb-4 p-4 border border-blue-500 bg-blue-100">
+          <h3 className="text-xl font-bold mb-2">Chỉnh sửa thông tin sinh viên</h3>
+          <input
+            className="border p-2 flex-1 mb-2"
+            type="text"
+            name="name"
+            value={editStudent.name}
+            onChange={(e) => setEditStudent({ ...editStudent, name: e.target.value })}
+            placeholder="Họ tên"
+          />
+          <input
+            className="border p-2 flex-1 mb-2"
+            type="text"
+            name="class"
+            value={editStudent.class}
+            onChange={(e) => setEditStudent({ ...editStudent, class: e.target.value })}
+            placeholder="Lớp"
+          />
+          <input
+            className="border p-2 w-24 mb-2"
+            type="number"
+            name="age"
+            value={editStudent.age}
+            onChange={(e) => setEditStudent({ ...editStudent, age: e.target.value })}
+            placeholder="Tuổi"
+          />
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            onClick={handleUpdateStudent}
+          >
+            Lưu thay đổi
+          </button>
+          <button
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2"
+            onClick={() => setEditStudent(null)}
+          >
+            Hủy
+          </button>
+        </div>
+      )}
+
       {/* Bảng sinh viên */}
       <table className="w-full border-collapse border">
         <thead>
@@ -129,7 +191,13 @@ function SinhVienList() {
               <td className="border p-2">{student.age}</td>
               <td className="border p-2">
                 <button
-                  className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                  className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
+                  onClick={() => handleEditStudent(student)}
+                >
+                  Sửa
+                </button>
+                <button
+                  className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 ml-2"
                   onClick={() => handleDeleteStudent(student.id)}
                 >
                   Xóa
